@@ -1,6 +1,6 @@
 FROM php:7.0-apache
 
-RUN curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
 RUN apt-get update \
  && apt-get install -y \
     git \
