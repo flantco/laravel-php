@@ -1,5 +1,6 @@
 FROM php:7.0-apache
 
+RUN curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
 RUN apt-get update \
  && apt-get install -y \
     git \
@@ -11,6 +12,8 @@ RUN apt-get update \
     libz-dev \
     libmemcached-dev \
     libpq-dev \
+    python-software-properties \ 
+    build-essential \
  && docker-php-ext-configure gd --enable-gd-native-ttf --with-jpeg-dir=/usr/lib/x86_64-linux-gnu --with-png-dir=/usr/lib/x86_64-linux-gnu --with-freetype-dir=/usr/lib/x86_64-linux-gnu \
  && docker-php-ext-install mbstring \
  && docker-php-ext-install pdo_pgsql \
@@ -43,10 +46,6 @@ RUN yes | pecl install xdebug \
     && echo "xdebug.profiler_enable = 0" >> /usr/local/etc/php/conf.d/xdebug.ini \
     && echo "xdebug.remote_host = dockerhost" >> /usr/local/etc/php/conf.d/xdebug.ini
 
-RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
-RUN apt-get update
-RUN apt-get -y install python-software-properties git build-essential
-RUN add-apt-repository -y ppa:chris-lea/node.js
 RUN apt-get update
 RUN apt-get -y install nodejs
 RUN /usr/bin/npm install -g gulp
