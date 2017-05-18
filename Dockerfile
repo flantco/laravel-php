@@ -6,16 +6,20 @@ RUN apt-get update \
     git \
     libfreetype6-dev \
     zlib1g-dev \
-    libjpeg62-turbo-dev \
+    libpq-dev \
+    libjpeg-dev \
+    libssl-dev \
     libmcrypt-dev \
     libpng12-dev \
     libz-dev \
     libmemcached-dev \
-    libpq-dev \
     python-software-properties \ 
     build-essential \
+    wkhtmltopdf \
+    xvfb \
  && docker-php-ext-install -j$(nproc) iconv mcrypt \
- && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+ && docker-php-ext-configure gd --enable-gd-native-ttf --with-jpeg-dir=/usr/lib --with-freetype-dir=/usr/include/freetype2 \
+ && docker-php-ext-install gd \
  && docker-php-ext-install mbstring \
  && docker-php-ext-install pdo_pgsql \
  && docker-php-ext-install zip \
@@ -38,12 +42,7 @@ RUN { \
  } > /usr/local/etc/php/conf.d/laravel.ini
 RUN yes | pecl install xdebug \
     && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
-    && echo "xdebug.idekey = PHPSTORM" >> /usr/local/etc/php/conf.d/xdebug.ini \
-    && echo "xdebug.default_enable = 1" >> /usr/local/etc/php/conf.d/xdebug.ini \
     && echo "xdebug.remote_enable = 1" >> /usr/local/etc/php/conf.d/xdebug.ini \
-    && echo "xdebug.remote_autostart = 1" >> /usr/local/etc/php/conf.d/xdebug.ini \
-    && echo "xdebug.remote_connect_back = 1" >> /usr/local/etc/php/conf.d/xdebug.ini \
-    && echo "xdebug.profiler_enable = 0" >> /usr/local/etc/php/conf.d/xdebug.ini \
     && echo "xdebug.remote_host = dockerhost" >> /usr/local/etc/php/conf.d/xdebug.ini
 
 RUN apt-get update
