@@ -36,9 +36,9 @@ RUN { \
     echo 'date.timezone=UTC'; \
     echo 'display_errors=Off'; \
     echo 'log_errors=On'; \
-    echo 'memory_limit = 128M'; \
-    echo 'upload_max_filesize = 20M'; \
-    echo 'post_max_size = 20M'; \
+    echo 'memory_limit = 1G'; \
+    echo 'upload_max_filesize = 2048M'; \
+    echo 'post_max_size = 2048M'; \
  } > /usr/local/etc/php/conf.d/laravel.ini
 RUN yes | pecl install xdebug \
     && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
