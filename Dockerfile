@@ -21,6 +21,7 @@ RUN apt-get update \
  && docker-php-ext-configure gd --enable-gd-native-ttf --with-jpeg-dir=/usr/lib --with-freetype-dir=/usr/include/freetype2 \
  && docker-php-ext-install gd \
  && docker-php-ext-install mbstring \
+ && docker-php-ext-install mongodb \
  && docker-php-ext-install pdo_pgsql \
  && docker-php-ext-install zip \
  && docker-php-ext-install -j$(nproc) gd \
