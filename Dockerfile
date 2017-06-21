@@ -1,4 +1,4 @@
-FROM php:7.0-apache
+FROM php:7.1-apache
 
 RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
 RUN apt-get update \
