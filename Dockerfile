@@ -1,10 +1,9 @@
 FROM php:7.1-apache
 
-RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
 RUN apt-get update \
  && apt-get install -y \
-    git \
     libfreetype6-dev \
+    libjpeg62-turbo-dev \
     zlib1g-dev \
     libpq-dev \
     libjpeg-dev \
@@ -15,25 +14,21 @@ RUN apt-get update \
     libmemcached-dev \
     python-software-properties \ 
     build-essential \
-    wkhtmltopdf \
-    xvfb \
  && pecl install mongodb \
  && echo "extension=mongodb.so" > /usr/local/etc/php/conf.d/ext-mongo.ini \
  && docker-php-ext-install -j$(nproc) iconv mcrypt \
- && docker-php-ext-configure gd --enable-gd-native-ttf --with-jpeg-dir=/usr/lib --with-freetype-dir=/usr/include/freetype2 \
+ && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+ && docker-php-ext-install -j$(nproc) gd \
  && docker-php-ext-install gd \
  && docker-php-ext-install mbstring \
  && docker-php-ext-install pdo_pgsql \
  && docker-php-ext-install zip \
- && docker-php-ext-install -j$(nproc) gd \
  && docker-php-ext-install bcmath \
- #&& docker-php-ext-install opcache \
+ && docker-php-ext-install opcache \
  && a2enmod rewrite \
  && sed -i 's!/var/www/html!/var/www/public!g' /etc/apache2/apache2.conf \
  && sed -i 's!/var/www/html!/var/www/public!g' /etc/apache2/sites-available/000-default.conf \
- && sed -i 's!/var/www/html!/var/www/public!g' /etc/apache2/sites-available/default-ssl.conf \
- && curl -sS https://getcomposer.org/installer \
-  | php -- --install-dir=/usr/local/bin --filename=composer
+ && sed -i 's!/var/www/html!/var/www/public!g' /etc/apache2/sites-available/default-ssl.conf
 RUN { \
     echo 'date.timezone=UTC'; \
     echo 'display_errors=Off'; \
@@ -42,13 +37,5 @@ RUN { \
     echo 'upload_max_filesize = 2048M'; \
     echo 'post_max_size = 2048M'; \
  } > /usr/local/etc/php/conf.d/laravel.ini
-RUN yes | pecl install xdebug \
-    && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
-    && echo "xdebug.remote_enable = 1" >> /usr/local/etc/php/conf.d/xdebug.ini \
-    && echo "xdebug.remote_host = dockerhost" >> /usr/local/etc/php/conf.d/xdebug.ini
-
-RUN apt-get update
-RUN apt-get -y install nodejs
-RUN /usr/bin/npm install -g gulp
 
 WORKDIR /var/www
