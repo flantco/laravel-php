@@ -17,9 +17,12 @@ RUN apt-get update \
  && pecl install mongodb \
  && echo "extension=mongodb.so" > /usr/local/etc/php/conf.d/ext-mongo.ini \
  && docker-php-ext-install -j$(nproc) iconv mcrypt \
- #&& docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-png-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
- && docker-php-ext-install -j$(nproc) gd \
- #&& docker-php-ext-install gd \
+ && docker-php-ext-configure gd \
+    --enable-gd-native-ttf \
+    --with-jpeg-dir=/usr/lib \
+    --with-freetype-dir=/usr/include/freetype2 \
+ && docker-php-ext-install gd \
+ && docker-php-ext-install exif \
  && docker-php-ext-install mbstring \
  && docker-php-ext-install pdo_pgsql \
  && docker-php-ext-install zip \
