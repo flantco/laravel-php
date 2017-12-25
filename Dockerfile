@@ -13,7 +13,7 @@ RUN apt-get update \
     libpng12-dev \
     libz-dev \
     libmemcached-dev \
-    python-software-properties \ 
+    python-software-properties \
     build-essential \
  && pecl install mongodb \
  && echo "extension=mongodb.so" > /usr/local/etc/php/conf.d/ext-mongo.ini \
