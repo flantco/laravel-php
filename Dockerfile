@@ -51,4 +51,15 @@ RUN curl -s https://download.newrelic.com/548C16BF.gpg | apt-key add - \
   && apt-get install -y newrelic-php5
 COPY confs/newrelic.ini.tpl /usr/local/etc/php/conf.d/newrelic.ini
 
+# Add apache internal vhost for non-public scripts
+COPY confs/apache_vhost_internal.conf /etc/apache2/sites-available/apache_vhost_internal.conf
+RUN ln -s /etc/apache2/sites-available/apache_vhost_internal.conf /etc/apache2/sites-enabled/apache_vhost_internal.conf \
+  && echo 'Listen 8081' >> /etc/apache2/ports.conf
+
+# Add scripts
+RUN mkdir -p /var/www/internal \
+  && curl -s https://raw.githubusercontent.com/rlerdorf/opcache-status/master/opcache.php > /var/www/internal/opcache.php
+COPY confs/clear_cache.php /var/www/internal/clear_cache.php
+
+
 WORKDIR /var/www
