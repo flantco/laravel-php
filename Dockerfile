@@ -44,4 +44,11 @@ RUN { \
     echo 'post_max_size = 2048M'; \
  } > /usr/local/etc/php/conf.d/laravel.ini
 
+# Add newrelic php-agent
+RUN curl -s https://download.newrelic.com/548C16BF.gpg | apt-key add - \
+  && echo "deb http://apt.newrelic.com/debian/ newrelic non-free" > /etc/apt/sources.list.d/newrelic.list \
+  && apt-get update \
+  && apt-get install -y newrelic-php5
+COPY newrelic.ini.tpl /usr/local/etc/php/conf.d/newrelic.ini
+
 WORKDIR /var/www
