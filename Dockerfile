@@ -3,9 +3,13 @@ FROM php:7.1-apache
 RUN apt-get update \
  && apt-get install -y \
     git \
+    freetds-bin \
+    freetds-dev \
+    freetds-common \
     libfreetype6-dev \
     libjpeg62-turbo-dev \
     zlib1g-dev \
+    libsybdb5 \
     libpq-dev \
     libjpeg-dev \
     libssl-dev \
@@ -15,6 +19,7 @@ RUN apt-get update \
     libmemcached-dev \
     python-software-properties \
     build-essential \
+ && ln -s /usr/lib/x86_64-linux-gnu/libsybdb.a /usr/lib/ \   
  && pecl install mongodb \
  && echo "extension=mongodb.so" > /usr/local/etc/php/conf.d/ext-mongo.ini \
  && docker-php-ext-install -j$(nproc) iconv mcrypt \
@@ -26,6 +31,7 @@ RUN apt-get update \
  && docker-php-ext-install exif \
  && docker-php-ext-install mbstring \
  && docker-php-ext-install pdo_pgsql \
+ && docker-php-ext-install pdo_dblib \
  && docker-php-ext-install zip \
  && docker-php-ext-install bcmath \
  && docker-php-ext-install opcache \
